@@ -1,0 +1,656 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body >
+  <div id="container">
+<!--   头部信息 -->
+     <div id="header">
+       <a href="#" class="logo"><img src="sprie.png" alt="" /></a>
+       <div class="hList" >
+           <h4 id="avatarBox"><img src="5.jpg" alt="" id="avatar"><label for="upload" title="点击切换头像"></label><input type="file" id="upload" accept="image/*" /></h4>
+       <ol>
+         <li>客户端下载</li>
+         <li>|</li>
+         <li>分享</li>
+         <li>关注</li>
+         <li id="changeViewBtn" class="smallView">查看</li>
+       </ol>
+       </div>
+     </div>
+<!-- 功能菜单 -->
+    <div class="toolMenu clear">
+
+      <ul id="nav">
+<!--           <li>
+    <label for="checkAll"><input type="checkbox" id="checkAll"> 全选</label>
+</li> -->
+          <li>
+              <a href="javascript:;" class="topLever">返回顶层</a>
+          </li>
+
+           <li>
+             <a href="javascript:;" class="back">返回上一层</a>
+         </li>
+
+          <li>
+              <a href="javascript:;" id="createFolderBtn">新建文件夹</a>
+          </li>
+
+          <li>
+              <a href="javascript:;" id="delFolderBtn">删除文件夹</a>
+          </li>
+
+          <li>
+              <a href="javascript:;" id="cloFolderBtn">复制文件夹</a>
+          </li>
+      </ul>
+
+    </div>
+
+<!--面包屑导航菜单 -->
+    <div class="crumbsBox clear ">
+         <div class="checkAllBtn"><input type="checkbox" id="checkAll"> 全选</div>
+        <div class="crumbs"></div>
+    </div>
+
+     <div class="container">
+         <div class="sideBar">
+               <ul class="treeList">
+              </ul>
+         </div>
+         <div class="cont">
+             <ul id="list" class="clear">
+             </ul>
+         </div>
+    </div>
+<!--右键菜单 -->
+  <div id="contMenu">
+     <ul>
+       <li>复制</li>
+       <li>返回</li>
+       <li>新建文件夹</li>
+       <li>删除</li>
+     </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
+<script src="datalist.js"></script>
+<script src="model.js"></script>
+<script src="tools.js"></script>
+<script src="index.js"></script>
+
+<!--js数据 -->
+<!--datalist -->
+var curPid=0;
+    var data = [
+        {
+            id: 1,
+            pid: 0,
+            name: 'HTML',
+            checked: false
+        },
+        {
+            id: 2,
+            pid: 0,
+            name: 'CSS',
+            checked: false
+        },
+        {
+            id: 3,
+            pid: 0,
+            name: 'JavaScript',
+            checked: false
+        },
+        {
+            id: 4,
+            pid: 1,
+            name: 'HTML1.0',
+            checked: false
+        },
+        {
+            id: 5,
+            pid: 1,
+            name: 'HTML4.0',
+            checked: false
+        },
+        {
+            id: 6,
+            pid: 1,
+            name: 'HTML5.0',
+            checked: false
+        },
+        {
+            id: 7,
+            pid: 4,
+            name: 'HTML1.0.1',
+            checked: false
+        },
+         {
+            id: 8,
+            pid: 3,
+            name: 'Juery',
+            checked: false
+        },
+        {
+            id: 9,
+            pid: 2,
+            name: 'CSS3',
+            checked: false
+
+        },
+        {
+            id: 10,
+            pid:3,
+            name: 'vue',
+            checked: false
+        },
+    ];
+    <!--model.js -->
+    /**
+ * Created by zmouse on 2017/4/20.
+ * 数据处理
+ *  封装对数据的处理
+*/
+  Model={
+            getChildren: function(id) {
+
+                return data.filter(function(item) {
+                    return item.pid == id;
+                });
+            },
+    /*
+             * 返回指定id的数据
+             *
+             *
+             * @param id
+             * @returns {*}
+    */
+            get: function(id) {
+                var info = null;
+                data.forEach(function (item) {
+                    if (item.id == id) {
+                        info = item;
+                    }
+                });
+                return info;
+            },
+
+            /**
+             * 获取指定id的父级
+             * @param <Number>id
+             * @returns Number
+             */
+            getParentId: function (id) {
+
+                let info = this.get(id);
+                return info ? info.pid : 0;
+            },
+
+            /**
+             * 获取指定id的父级对象
+             * @param id
+             * @returns {*}
+             */
+            getParent: function(id) {
+                var parentId = this.getParentId(id);
+                return this.get(parentId);
+            },
+
+            getParents: function(id) {
+                let parents =[];
+                var parent = this.getParent(id);
+                while(parent) {
+                    parents.unshift(parent);
+                    parent = this.getParent(parent.id);
+                }
+                return parents;
+            },
+              /* 根据指定的id返回其对应的所有父级数据
+                 * @param id
+                 * @returns {Array}
+                 */
+               /*getAllParent: function (id) {
+
+                    //存所有的父级数据
+                    var arr = [];
+
+                    //获取到当前id对应的数据
+                    var _info = this.get(id);
+                    //通过该数据的pid就可以找到他的父级的id
+                    //var _parentId = _info.pid;
+                    //通过pid得到对应的父级的数据
+                    var _parent = this.get(_info.pid);
+                    arr.push(_info)
+                    while (_parent) {
+                        //把当前的_parent添加到数组中
+
+                        arr.unshift(_parent);
+                        //获取_parent的父级
+                        _parent = this.get(_parent.pid);
+                    }
+
+                    return arr;
+                }*/
+  }
+<!--tools.js-->
+
+//渲染文件夹
+function renderView(data){
+      elements.list.innerHTML="";
+      data.forEach(function(item){
+
+            var li=document.createElement("li");
+                li.className="originStyle";
+
+            var div=document.createElement("div");
+            div.className="folder";
+            div.setAttribute("data-file-id",item.id);
+
+            var p=document.createElement("p");
+            p.innerHTML=item.name;
+
+            var label=document.createElement("label");
+            label.setAttribute("onoff",false);
+
+            var input=document.createElement("input");
+            input.type="text";
+            input.style.cssText="margin:8px 0 0 30px";
+
+           //点击文件夹渲染子集
+           div.onclick=function(e){
+              curPid=item.id;
+              let curData = Model.getChildren(curPid);
+              renderView(curData);  //更新数据渲染文件夹
+              rendeCrumbs(curPid)   //同时渲染面包屑导航
+              e.stopPropagation()
+           }
+           //点击label切换样式
+           label.onclick=function(e){
+               this.onoff=!this.onoff;
+               if(this.onoff){
+                   this.className="checkbox";
+                   li.className="checked"
+                    item.checked=true
+                   // console.log(item)
+               }else{
+                   this.className="";
+                   li.className=""
+                   item.checked=false
+                   //console.log(item)
+               }
+              //检测是否全选
+              var newData=Model.getChildren(curPid);
+              var len=newData.length;
+               //获取当前选中元素的个数
+              var checkedLen= newData.filter(function(item){
+                 return item.checked;
+              }).length;
+              //当前选中元素的个数和当前所有元素的个数一致，说明全选
+              if(len==checkedLen){
+                elements.checkAllBtn.checked=true
+              }else{
+                elements.checkAllBtn.checked=false
+              }
+               e.stopPropagation()
+           }
+
+           p.addEventListener("dblclick",function(e){
+                 input.style.display="block";
+                 this.style.display="none";
+                 input.select();
+                 e.stopPropagation()
+                // item.name=inputVal;
+
+           });
+           input.addEventListener("blur",function(){
+                  p.style.display="block";
+                  this.style.display="none";
+                  p.innerHTML=this.value;
+                  inputVal=this.value;
+                  item.name=inputVal;
+           })
+           //添加鼠标滑过离开效果
+            li.addEventListener("mouseover",function(){
+               li.className="checked";
+               item.checked=true  //注意此处要同步更新item的状态，没有此行代码会导致款选无法删除的问题
+            })
+            li.addEventListener("mouseout",function(){
+                 if(label.className!="checkbox"){
+                     li.className="";
+                     item.checked=false   //注意此处要同步更新item的状态，//注意此处要同步更新item的状态，没有此行代码会导致款选无法删除的问题
+                 }
+            })
+            elements.list.appendChild(li);
+            li.appendChild(div);
+            li.appendChild(label);
+            li.appendChild(p);
+            li.appendChild(input);
+
+            //根据item的checked属性对应li的样式
+            if(item.checked){
+                 li.className="checked";
+                 label.className="checkbox";
+            }else{
+                 li.className="";
+                 label.className="";
+            }
+            checkCrash(data)  //在渲染的时候进行框选
+
+    })
+}
+
+//渲染左侧树形菜单
+function treeHtml(treeId){
+  var childs=Model.getChildren(treeId);
+  var html="<ul>";
+  childs.forEach(function(item){
+    //获取当前id下所有的父级，也就是当前id下的层级。
+     var level=Model.getParents(item.id).length;
+      html+=`<li>
+             <div class="treeTitle" style="padding-left:${level*15}px;background:url('folder-tree.png') ${level*15}px  7px  no-repeat;text-indent:25px;"
+                  data-file-id=${item.id}
+                  onclick='renderTree(${item.id})' >
+                  <span>
+                     <strong>${item.name}</strong>
+                     <i></i>
+                  </span>
+              </div>
+              ${treeHtml(item.id)}
+        </li>`;
+    });
+    html+="</ul>";
+    return html
+}
+
+function renderTree(id){  //传入当前元素的id获取到其子集
+   renderView(Model.getChildren(id))  //根据子集渲染视图结构
+   rendeCrumbs(id)         //根据当前元素的id同步更新curPid的值同时渲染面包屑
+}
+
+
+function rendeCrumbs(id){
+    elements.crumbs.innerHTML="";
+    //渲染面包屑导航
+    curPid=id;
+    crumbsArr=Model.getParents(curPid);
+     if(curPid!=0){
+        crumbsArr.push(Model.get(curPid))
+     }
+    var zIndex=1; //渲染导航层级
+    crumbsArr.forEach(function(item,index){
+      var a=document.createElement("a");;
+      a.innerHTML=item.name
+      a.href="javascript:"
+      a.className="CrumbsBg1";
+
+      a.onclick=function(){
+         curPid=item.id;
+         renderView(Model.getChildren(curPid))
+      };
+      elements.crumbs.appendChild(a)
+
+    })
+}
+//碰撞检测
+function crash (ele1,ele2){
+        var ele1Rt=ele1.offsetLeft+ele1.offsetWidth;
+        var ele2Rt=ele2.offsetLeft+ele2.offsetWidth;
+        var ele1Lt=ele1.offsetLeft
+        var ele2Lt=ele2.offsetLeft;
+
+        var ele2Top=ele2.offsetTop;
+        var ele2Btm=ele2.offsetTop+ele2.offsetHeight;
+        var ele1Top=ele1.offsetTop;
+        var ele1Btm=ele1.offsetTop+ele1.offsetHeight;
+
+       if(ele1Rt>ele2Lt && ele1Lt<ele2Rt && ele1Btm>ele2Top && ele1Top<ele2Btm  )
+       {
+              return true
+       }else{
+             return false
+       }
+  }
+
+//获取当前所有文件夹
+function getAllFiles(){
+    var fList=elements.list.getElementsByTagName("li");  //注意动态获取
+    return fList
+    console.log(fList.length)
+}
+
+//碰撞检测函数
+function checkCrash(data){
+    data.forEach(function(item){
+        var fList=getAllFiles() //获取当前所有文件夹对象
+        document.onmousedown=function(e){
+               var disx=e.clientX;
+               var disy=e.clientY;
+               var box=document.createElement("div"); //box是拖拽生成的层
+               box.style.position="absolute";
+               box.style.left=e.clientX+"px";
+               box.style.top=e.clientY+"px";
+               box.style.background="rgba(0,0,0,.2)"
+               document.body.appendChild(box)
+               document.onmousemove=function(e){
+                   box.style.left=Math.min(e.clientX,disx)+"px";
+                   box.style.top=Math.min(e.clientY,disy)+"px";+"px";
+                   box.style.width=Math.abs(e.clientX-disx)+"px";
+                   box.style.height=Math.abs(e.clientY-disy)+"px";
+
+                   for(var i=0;i<fList.length;i++){
+                        var curLabel=fList[i].getElementsByTagName("label")[0] //拖层
+                        if(crash(box,fList[i])){
+                             fList[i].className="checked";
+                             curLabel.className="checkbox";
+                             item.checked=true
+                        }else{
+                             fList[i].className="";
+                             curLabel.className="";
+                             item.checked=false
+                        }
+                   }
+               }
+               document.onmouseup=function(e){
+                  document.body.removeChild(box);
+                  box.style.display="none"
+                  document.onmousemove=null;
+
+            }
+
+           if(e.target.tagName.toUpperCase()=="HTML"){
+
+               renderView(Model.getChildren(curPid))
+           }
+         //   
+        }
+    })
+}
+
+<!--index.js-->
+
+var curPid=0;
+var crumbsArr=[];
+
+let elements = {
+    list: document.getElementById('list'),
+    lis:document.querySelectorAll('.treeTitle'),
+    createFolder: document.getElementById('createFolderBtn'),
+    treeList: document.querySelector('.treeList'),
+    back: document.querySelector('#nav .back'),
+    topLever: document.querySelector('#nav .topLever'),
+    crumbs: document.querySelector('.crumbs'),
+    treeTitles: document.querySelectorAll('.treeTitle'),
+    checkAllBtn:document.querySelector("#checkAll"),
+    delFolderBtn:document.querySelector("#delFolderBtn"),
+    cloFolderBtn:document.querySelector("#cloFolderBtn"),
+    inputVal:"新建文件夹",  //设值改变的置一个全局变量。用来记录每次
+    contMenu:document.querySelector("#contMenu"),
+    changeViewBtn:document.querySelector("#changeViewBtn"),  //查看方式--切换布局按钮;
+    avatar:document.querySelector("#avatar"), //获取头像;
+    upload:document.querySelector("#upload") //获取头像按钮;
+}
+
+
+//初始化渲染数据,获取到pid=0的数据
+ //特别注意：此处不能直接改变全局的data也就是如下写法
+ //data=Model.getChildren( curPid )
+ //renderView( data )
+renderView( Model.getChildren( curPid ) )
+
+//初始化渲染左侧树形导航,获取到pid=0的数据
+elements.treeList.innerHTML=treeHtml(curPid);
+
+//返回上一层
+elements.back.addEventListener("click",function(){
+
+    var parentId=Model.getParentId(curPid);//获取当前curPid的父级id
+    curPid=parentId   //重新赋值curPid
+    renderView(Model.getChildren(curPid))  //根据重新赋值curPid的值更新视图
+    rendeCrumbs(curPid)  //更新面包屑导航
+})
+//返回顶层
+elements.topLever.addEventListener("click",function(){
+    renderView(Model.getChildren(0))
+    rendeCrumbs(0)  //更新面包屑导航
+})
+
+elements.checkAllBtn.onclick=function(){
+ var curData=Model.getChildren(curPid)
+     curData.forEach(function(item){
+        item.checked=this.checked
+     })
+}
+//新建文件夹
+elements.createFolder.onclick=function(){
+     data.push({
+            id:data.length+1,
+            pid:curPid,
+            name: elements.inputVal,
+            checked: false
+     })
+     console.log(data)
+     data=data.filter(function(item){   //过滤选中的元素特别注意
+          return !item.checked
+     });
+    renderView(Model.getChildren(curPid))
+}
+//删除文件夹
+elements.delFolderBtn.onclick=function(){
+   // var curData=Model.getChildren(curPid);
+    for(var i=0;i<data.length;i++){
+        if(data[i].checked){
+             data.splice(i,1);
+             i--
+        }
+    }
+    console.log(data)
+/*    var newData=curData.filter(function(item,index){
+          return !item.checked
+     })*/
+    renderView(Model.getChildren(curPid))
+}
+//复制文件夹
+elements.cloFolderBtn.onclick=function(){
+/*    var curData=Model.getChildren(curPid);
+    //得到选中的元素
+    var newData=curData.filter(function(item){
+        return item.checked
+    })
+    newData.forEach(function(item){
+       curData.push({
+            id: data.length+1,
+            pid:Model.getParentId(item.id),
+            name: item.name+"副本",
+            checked: false
+       })
+     })*/
+  data.forEach(function(item){
+    if(item.checked){
+        data.push({
+              id: data.length+1,
+              pid:Model.getParentId(item.id),
+              name: item.name+"副本",
+              checked: false
+         })
+    }
+  })
+    console.log(data)
+   var curData=Model.getChildren(curPid)
+   renderView(curData);
+}
+
+//点击全选按钮设置所有文件全选
+elements.checkAllBtn.onclick=function(){
+     var curData=Model.getChildren(curPid);
+     var checkedVal=this.checked
+     curData.forEach(function(item){
+       item.checked=checkedVal;
+    })
+    renderView(curData)
+}
+
+//点击查看按钮切换缩略图
+elements.changeViewBtn.onclick=function(){
+   //切换图标样式
+   if(this.className=="smallView"){
+    this.className="showView"
+   }else if(this.className=="showView"){
+    this.className="smallView"
+   }
+};
+
+
+//点击头像更换头像
+elements.upload.onchange=function(e){
+  var file=e.target.files[0]
+  var fd=new FileReader();
+  fd.readAsDataURL(file)
+  fd.onload=function(){
+       elements.avatar.src=this.result;
+}
+
+  //给每条数据提交新的class，
+/*   data.map(function(item){
+      item.className="smallView"
+   })
+   renderView(data)*/
+}
+
+/*//右键点击菜单
+document.oncontextmenu=function(e){
+    console.log(e.clientX)
+  elements.contMenu.style.display="block";
+  elements.contMenu.style.left=e.clientX+"px";
+  elements.contMenu.style.top=e.clientY+"px";
+  return false
+}
+document.onclick=function(e){
+    console.log(e.clientX)
+    elements.contMenu.style.display="none";
+
+    return false
+}
+*/
+/*更多功能后续更新....*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
