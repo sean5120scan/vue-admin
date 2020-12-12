@@ -1,0 +1,114 @@
+{
+  "id": "2033447",
+  "name": "bim",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "11215426",
+      "name": "more",
+      "font_class": "more1",
+      "unicode": "e71f",
+      "unicode_decimal": 59167
+    },
+    {
+      "icon_id": "593477",
+      "name": "文件夹",
+      "font_class": "file",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "1164884",
+      "name": "向下箭头",
+      "font_class": "down",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "7310415",
+      "name": "向上",
+      "font_class": "up",
+      "unicode": "e74c",
+      "unicode_decimal": 59212
+    },
+    {
+      "icon_id": "621626",
+      "name": "电话",
+      "font_class": "tel",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "7155297",
+      "name": "切换账号",
+      "font_class": "replace",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "5485613",
+      "name": "错误 (1)",
+      "font_class": "del",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "4880416",
+      "name": "上传",
+      "font_class": "upload",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "1079448",
+      "name": "成功",
+      "font_class": "success",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "59346",
+      "name": "error",
+      "font_class": "error",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "1410327",
+      "name": "error",
+      "font_class": "warning",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "1311988",
+      "name": "更多",
+      "font_class": "more",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "4503683",
+      "name": "loading",
+      "font_class": "loading",
+      "unicode": "e6cd",
+      "unicode_decimal": 59085
+    },
+    {
+      "icon_id": "15267564",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "339639",
+      "name": "退出",
+      "font_class": "loginout",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    }
+  ]
+}

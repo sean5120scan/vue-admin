@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="">
+    <!-- <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css" rel="stylesheet"> -->
+    <title>BIM中台</title>
+      <style>
+        body{ background:#eee}
+        .anibox{width: 100%; height: 100vh;display: flex;justify-content: center;align-items: center;}
+        .clc{width:30px; height: 30px;position: relative;}
+        .clc::before,.clc::after{
+          content:"";display: block;position: absolute;top:50%;left:50%;border-radius: 50%;
+          background:rgb(146, 223, 180);opacity: 0.6;
+        }
+        .clc::before{
+          width: 50%;
+          height: 50%;
+          animation: bf 0.6s ease-in infinite alternate;;
+        }
+        .clc::after{
+          width: 100%;
+          height: 100%;
+          animation: af 0.6s ease-in infinite alternate;;
+        }
+        @keyframes bf{
+          0%{transform:translate3d(-50%,-50%,0) scale(0.7)}
+          100%{transform:translate3d(-50%,-50%,0) scale(1)}
+        }
+        @keyframes af{
+          0%{transform:translate3d(-50%,-50%,0) scale(1.3)}
+          100%{transform:translate3d(-50%,-50%,0) scale(1)}
+        }
+      </style>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app">
+        <div class="anibox">
+          <div class="clc"></div>
+        </div>
+    </div>
+    <!-- built files will be auto injected -->
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue-router/3.4.3/vue-router.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vuex/3.5.1/vuex.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/index.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0-0/axios.js"></script> -->
+  </body>
+</html>
